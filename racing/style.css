@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: wheat;
+    color: darkgray;
+}
+
+.container {
+    height: 100vh;
+    width: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    position: relative;
+}
+
+.game-area span {
+    color: rgb(0, 0, 0);
+    display: block;
+    margin: auto;
+    position: absolute;
+    font-weight: bold;
+    font-size: 50px;
+    text-align: center;
+   top: 150px;
+}
+
+.container .image {
+    position: absolute;
+    width: 30%;
+    bottom: 0;
+
+    display: block;
+}
+
+.car{
+    position: absolute;
+    bottom: 0;
+    transform: rotate(360deg);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+.car img{
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    width: 40%;
+    margin: auto;
+}

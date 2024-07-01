@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tic-Tac-Toe Game</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(3, 100px);
+                grid-template-rows: repeat(3, 100px);
+                gap: 5px;
+                justify-content: center;
+                margin-top: 20px;
+            }
+            .grid-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+                border: 1px solid #000;
+            }
+            .winning-line {
+                position: absolute;
+                height: 4px;
+                background-color: red;
+                z-index: 1;
+                display: none;
+            }
+            .win-036,
+            .win-147,
+            .win-258,
+            .win-012,
+            .win-345,
+            .win-678,
+            .win-048,
+            .win-246 {
+                display: block;
+                position: absolute;
+                height: 4px;
+                background-color: red;
+                z-index: 1;
+            }
+            .win-036 {
+                display: block;
+                top: 50%;
+                left: 16.67%;
+                transform: translateX(-50%) rotate(90deg);
+                width: 300px;
+            }
+            .win-147 {
+                display: block;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) rotate(90deg);
+                width: 300px;
+            }
+            .win-258 {
+                display: block;
+                top: 50%;
+                left: 83.33%;
+                transform: translateX(-50%) rotate(90deg);
+                width: 300px;
+            }
+            .win-012 {
+                display: block;
+                top: 16.67%;
+                left: 50%;
+                transform: translateY(-50%);
+                width: 300px;
+            }
+
+            .win-345 {
+                display: block;
+                top: 50%;
+                left: 50%;
+                transform: translateY(-50%);
+                width: 300px;
+            }
+            .win-678 {
+                display: block;
+                top: 83.33%;
+                left: 50%;
+                transform: translateY(-50%);
+                width: 300px;
+            }
+            .win-048 {
+                display: block;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(45deg);
+                width: 424.26px;
+            }
+            .win-246 {
+                display: block;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-45deg);
+                width: 424.26px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container text-center mt-5">
+            <h2>Turn <span class="turn"></span></h2>
+            <div class="grid-container"></div>
+            <div class="winning-line"></div>
+        </div>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            $(document).ready(function () {
+                const winningConditions = [
+                    [0, 1, 2],
+                    [3, 4, 5],
+                    [6, 7, 8],
+                    [0, 3, 6],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [0, 4, 8],
+                    [2, 4, 6],
+                ];
+
+                let gameState = Array(9).fill(null);
+                let currentPlayer = "X";
+                const gridContainer = $(".grid-container");
+                const turnDisplay = $(".turn");
+
+                function checkWinner(playerArray) {
+                    for (const condition of winningConditions) {
+                        if (
+                            condition.every((index) =>
+                                playerArray.includes(index)
+                            )
+                        ) {
+                            return condition;
+                        }
+                    }
+                    return null;
+                }
+
+                function updateTurnDisplay() {
+                    turnDisplay.text(currentPlayer);
+                }
+
+                function resetGame() {
+                    gameState = Array(9).fill(null);
+                    gridContainer.empty();
+                    $(".winning-line").removeClass().addClass("winning-line");
+                    currentPlayer = "X";
+                    updateTurnDisplay();
+                    createGrid();
+                }
+
+                function applyWinningCss(condition) {
+                    const winClassMap = {
+                        "0,1,2": "win-012",
+                        "3,4,5": "win-345",
+                        "6,7,8": "win-678",
+                        "0,3,6": "win-036",
+                        "1,4,7": "win-147",
+                        "2,5,8": "win-258",
+                        "0,4,8": "win-048",
+                        "2,4,6": "win-246",
+                    };
+                    const winningClass = winClassMap[condition.join()];
+                    if (winningClass) {
+                        $(".winning-line").addClass(winningClass);
+                    }
+                }
+
+                function handleCellClick() {
+                    const $cell = $(this);
+                    const index = $cell.data("id");
+                    if (gameState[index] !== null || checkWinner(gameState))
+                        return;
+
+                    gameState[index] = currentPlayer;
+                    $cell.text(currentPlayer);
+
+                    const playerArray = gameState
+                        .map((val, idx) => (val === currentPlayer ? idx : null))
+                        .filter((val) => val !== null);
+                    const winningCondition = checkWinner(playerArray);
+
+                    if (winningCondition) {
+                        applyWinningCss(winningCondition);
+                        setTimeout(() => {
+                            alert(`${currentPlayer} wins!`);
+                            resetGame();
+                        }, 100);
+                    } else {
+                        currentPlayer = currentPlayer === "X" ? "O" : "X";
+                        updateTurnDisplay();
+                    }
+                }
+
+                function createGrid() {
+                    for (let i = 0; i < 9; i++) {
+                        gridContainer.append(
+                            `<div class="grid-item" data-id="${i}"></div>`
+                        );
+                    }
+                    $(".grid-item").on("click", handleCellClick);
+                }
+
+                updateTurnDisplay();
+                createGrid();
+            });
+        </script>
+    </body>
+</html>

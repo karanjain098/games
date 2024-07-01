@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Snake Game</h2>
+        <button id="startButton">Start New Game</button>
+      </div>
+      <div class="game-container">
+        <div class="score-area">
+          <span>Score: <span id="scoreValue">0</span></span>
+          <span>Time: <span id="timeValue">0</span></span>
+        </div>
+        <div class="game-area">
+          <div class="feed"></div>
+          <div class="snake"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/main.js" type="module"></script>
+  </body>
+</html>
